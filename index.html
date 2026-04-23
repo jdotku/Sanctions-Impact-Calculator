@@ -12,14 +12,27 @@
 </head>
 <body>
 
-  <!-- Scanline overlay -->
   <div class="scanlines"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-brand"><span class="dim">[</span>SIC<span class="dim">]</span></div>
+    <div class="nav-tabs">
+      <a href="index.html"    class="nav-tab active">ANALYSIS</a>
+      <a href="timeline.html" class="nav-tab">TIMELINE</a>
+      <a href="intel.html"    class="nav-tab">INTEL BRIEF</a>
+    </div>
+    <div class="nav-right">
+      <span class="live-dot"></span>
+      <span class="live-text">LIVE</span>
+    </div>
+  </nav>
 
   <!-- Threat Ticker -->
   <div class="ticker-bar">
     <span class="ticker-label">&#9654; THREAT FEED</span>
     <div class="ticker-track">
-      <div class="ticker-content" id="ticker">
+      <div class="ticker-content">
         STRAIT OF HORMUZ TRAFFIC ANOMALY DETECTED &nbsp;&#9646;&nbsp;
         IRANIAN EXPORT VOLUME DOWN 34% SINCE Q1 &nbsp;&#9646;&nbsp;
         RED SEA ROUTING DELAYS: +12 DAYS AVERAGE &nbsp;&#9646;&nbsp;
@@ -32,162 +45,155 @@
         VENEZUELA PDVSA TANKER FLEET SHADOW NETWORK ACTIVE &nbsp;&#9646;&nbsp;
       </div>
     </div>
-    <div class="live-indicator">
-      <span class="live-dot"></span>
-      <span class="live-text">LIVE</span>
-    </div>
   </div>
 
-  <!-- Main layout -->
-  <div class="main-layout">
+  <!-- Page content wrapper (receives flicker animation) -->
+  <div class="page-content">
+    <div class="main-layout">
 
-    <!-- LEFT PANEL -->
-    <div class="left-panel">
+      <!-- LEFT PANEL -->
+      <div class="left-panel">
 
-      <!-- Header -->
-      <div class="app-header">
-        <div class="header-top">
-          <span class="header-bracket">[</span>
-          <span class="header-title">SANCTIONS IMPACT CALCULATOR</span>
-          <span class="header-bracket">]</span>
-        </div>
-        <div class="header-sub">GEOPOLITICAL SUPPLY CHAIN ANALYSIS SYSTEM<span class="blink-cursor">_</span></div>
-        <div class="header-meta">
-          <span>SYS v4.2.1</span>
-          <span>&#9646;</span>
-          <span>CLEARANCE: TS/SCI</span>
-          <span>&#9646;</span>
-          <span id="sys-time">--:--:-- UTC</span>
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <div class="control-section">
-        <div class="section-label">&#9642; ANALYSIS PARAMETERS</div>
-
-        <div class="control-group">
-          <label class="field-label" for="target-nation">TARGET NATION</label>
-          <div class="select-wrapper">
-            <select id="target-nation" class="terminal-select">
-              <option value="">-- SELECT TARGET --</option>
-              <option value="Iran">Iran</option>
-              <option value="Russia">Russia</option>
-              <option value="China">China</option>
-              <option value="Saudi Arabia">Saudi Arabia</option>
-              <option value="Venezuela">Venezuela</option>
-              <option value="North Korea">North Korea</option>
-            </select>
-            <span class="select-arrow">&#9660;</span>
+        <div class="app-header">
+          <div class="header-top">
+            <span class="header-bracket">[</span>
+            <span class="header-title">SANCTIONS IMPACT CALCULATOR</span>
+            <span class="header-bracket">]</span>
+          </div>
+          <div class="header-sub">GEOPOLITICAL SUPPLY CHAIN ANALYSIS SYSTEM<span class="blink-cursor">_</span></div>
+          <div class="header-meta">
+            <span>SYS v4.2.1</span>
+            <span>&#9646;</span>
+            <span>CLEARANCE: TS/SCI</span>
+            <span>&#9646;</span>
+            <span id="sys-time">--:--:-- UTC</span>
           </div>
         </div>
 
-        <div class="control-group">
-          <label class="field-label" for="commodity">COMMODITY</label>
-          <div class="select-wrapper">
-            <select id="commodity" class="terminal-select">
-              <option value="">-- SELECT COMMODITY --</option>
-              <option value="Crude Oil">Crude Oil</option>
-              <option value="Natural Gas">Natural Gas</option>
-              <option value="Wheat">Wheat</option>
-              <option value="Fertilizer">Fertilizer</option>
-              <option value="Copper">Copper</option>
-              <option value="Lithium">Lithium</option>
-            </select>
-            <span class="select-arrow">&#9660;</span>
+        <div class="control-section">
+          <div class="section-label">&#9642; ANALYSIS PARAMETERS</div>
+
+          <div class="control-group">
+            <label class="field-label" for="target-nation">TARGET NATION</label>
+            <div class="select-wrapper">
+              <select id="target-nation" class="terminal-select">
+                <option value="">-- SELECT TARGET --</option>
+                <option value="Iran">Iran</option>
+                <option value="Russia">Russia</option>
+                <option value="China">China</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="North Korea">North Korea</option>
+              </select>
+              <span class="select-arrow">&#9660;</span>
+            </div>
           </div>
+
+          <div class="control-group">
+            <label class="field-label" for="commodity">COMMODITY</label>
+            <div class="select-wrapper">
+              <select id="commodity" class="terminal-select">
+                <option value="">-- SELECT COMMODITY --</option>
+                <option value="Crude Oil">Crude Oil</option>
+                <option value="Natural Gas">Natural Gas</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Fertilizer">Fertilizer</option>
+                <option value="Copper">Copper</option>
+                <option value="Lithium">Lithium</option>
+              </select>
+              <span class="select-arrow">&#9660;</span>
+            </div>
+          </div>
+
+          <button id="run-btn" class="run-button">
+            <span class="btn-bracket">[</span>
+            <span class="btn-text">&#9658; RUN ANALYSIS</span>
+            <span class="btn-bracket">]</span>
+          </button>
         </div>
 
-        <button id="run-btn" class="run-button">
-          <span class="btn-bracket">[</span>
-          <span class="btn-text">&#9658; RUN ANALYSIS</span>
-          <span class="btn-bracket">]</span>
-        </button>
-      </div>
-
-      <!-- Output Panel -->
-      <div class="output-section" id="output-section">
-        <div class="output-placeholder" id="output-placeholder">
-          <div class="placeholder-lines">
-            <div>AWAITING INPUT PARAMETERS...</div>
-            <div>SELECT TARGET NATION AND COMMODITY</div>
-            <div>THEN EXECUTE ANALYSIS</div>
-            <div class="blink-line">&#9646;&#9646;&#9646;</div>
+        <div class="output-section" id="output-section">
+          <div class="output-placeholder" id="output-placeholder">
+            <div class="placeholder-lines">
+              <div>AWAITING INPUT PARAMETERS...</div>
+              <div>SELECT TARGET NATION AND COMMODITY</div>
+              <div>THEN EXECUTE ANALYSIS</div>
+              <div class="blink-line">&#9646;&#9646;&#9646;</div>
+            </div>
           </div>
-        </div>
 
-        <div class="output-results" id="output-results" style="display:none;">
+          <div class="output-results" id="output-results" style="display:none;">
 
-          <!-- Global Supply at Risk -->
-          <div class="result-card" id="card-supply">
-            <div class="card-header">&#9642; GLOBAL SUPPLY AT RISK</div>
-            <div class="card-body">
-              <div class="big-stat" id="supply-pct">--.--%</div>
-              <div class="bar-container">
-                <div class="bar-fill" id="supply-bar" style="width:0%"></div>
-                <div class="bar-label" id="supply-bar-label">0%</div>
+            <div class="result-card" id="card-supply">
+              <div class="card-header">&#9642; GLOBAL SUPPLY AT RISK</div>
+              <div class="card-body">
+                <div class="big-stat" id="supply-pct">--.--%</div>
+                <div class="bar-container">
+                  <div class="bar-fill" id="supply-bar" style="width:0%"></div>
+                  <div class="bar-label" id="supply-bar-label">0%</div>
+                </div>
+                <div class="stat-sub" id="supply-volume">ANNUAL EXPORT VOLUME: CALCULATING...</div>
               </div>
-              <div class="stat-sub" id="supply-volume">ANNUAL EXPORT VOLUME: CALCULATING...</div>
             </div>
-          </div>
 
-          <!-- Top Exposed Nations -->
-          <div class="result-card" id="card-nations">
-            <div class="card-header">&#9642; TOP EXPOSED NATIONS</div>
-            <div class="card-body" id="nations-list">
+            <div class="result-card" id="card-nations">
+              <div class="card-header">&#9642; TOP EXPOSED NATIONS</div>
+              <div class="card-body" id="nations-list"></div>
             </div>
-          </div>
 
-          <!-- Projected Price Shock -->
-          <div class="result-card" id="card-price">
-            <div class="card-header">&#9642; PROJECTED PRICE SHOCK</div>
-            <div class="card-body">
-              <div class="big-stat shock-stat" id="price-shock">+---%</div>
-              <div class="stat-sub" id="price-context">ESTIMATED INCREASE BASED ON HISTORICAL ANALOGUES</div>
+            <div class="result-card" id="card-price">
+              <div class="card-header">&#9642; PROJECTED PRICE SHOCK</div>
+              <div class="card-body">
+                <div class="big-stat shock-stat" id="price-shock">+---%</div>
+                <div class="stat-sub" id="price-context">ESTIMATED INCREASE BASED ON HISTORICAL ANALOGUES</div>
+              </div>
             </div>
-          </div>
 
-          <!-- Historical Analogue -->
-          <div class="result-card" id="card-history">
-            <div class="card-header">&#9642; HISTORICAL ANALOGUE</div>
-            <div class="card-body">
-              <div class="analogue-event" id="analogue-event">---</div>
-              <div class="analogue-desc" id="analogue-desc">---</div>
+            <div class="result-card" id="card-history">
+              <div class="card-header">&#9642; HISTORICAL ANALOGUE</div>
+              <div class="card-body">
+                <div class="analogue-event" id="analogue-event">---</div>
+                <div class="analogue-desc" id="analogue-desc">---</div>
+              </div>
             </div>
-          </div>
 
-          <!-- Threat Assessment -->
-          <div class="result-card" id="card-threat">
-            <div class="card-header">&#9642; THREAT ASSESSMENT</div>
-            <div class="card-body threat-body">
-              <div class="threat-level" id="threat-level">---</div>
-              <div class="threat-bar-row" id="threat-bar-row"></div>
+            <div class="result-card" id="card-threat">
+              <div class="card-header">&#9642; THREAT ASSESSMENT</div>
+              <div class="card-body threat-body">
+                <div class="threat-level" id="threat-level">---</div>
+                <div class="threat-bar-row" id="threat-bar-row"></div>
+              </div>
             </div>
-          </div>
 
+          </div>
+        </div>
+
+      </div><!-- /left-panel -->
+
+      <!-- RIGHT PANEL: Map -->
+      <div class="right-panel">
+        <div class="map-header">
+          <span>&#9642; GEOSPATIAL EXPOSURE MATRIX</span>
+          <span class="map-status" id="map-status">BASELINE MODE</span>
+        </div>
+        <div id="map"></div>
+        <div class="map-legend">
+          <div class="legend-item"><span class="legend-dot dot-target"></span> TARGET NATION</div>
+          <div class="legend-item"><span class="legend-dot dot-high"></span> HIGH EXPOSURE</div>
+          <div class="legend-item"><span class="legend-dot dot-med"></span> MODERATE EXPOSURE</div>
+          <div class="legend-item"><span class="legend-dot dot-low"></span> LOW EXPOSURE</div>
+          <div class="legend-item"><span class="legend-dot dot-none"></span> UNAFFECTED</div>
         </div>
       </div>
 
-    </div><!-- /left-panel -->
-
-    <!-- RIGHT PANEL: Map -->
-    <div class="right-panel">
-      <div class="map-header">
-        <span>&#9642; GEOSPATIAL EXPOSURE MATRIX</span>
-        <span class="map-status" id="map-status">BASELINE MODE</span>
-      </div>
-      <div id="map"></div>
-      <div class="map-legend" id="map-legend">
-        <div class="legend-item"><span class="legend-dot dot-target"></span> TARGET NATION</div>
-        <div class="legend-item"><span class="legend-dot dot-high"></span> HIGH EXPOSURE</div>
-        <div class="legend-item"><span class="legend-dot dot-med"></span> MODERATE EXPOSURE</div>
-        <div class="legend-item"><span class="legend-dot dot-low"></span> LOW EXPOSURE</div>
-        <div class="legend-item"><span class="legend-dot dot-none"></span> UNAFFECTED</div>
-      </div>
     </div>
-
-  </div><!-- /main-layout -->
+  </div><!-- /page-content -->
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="data.js"></script>
+  <script src="logger.js"></script>
+  <script src="calculations.js"></script>
+  <script src="render.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
