@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INTEL BRIEF — SIC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="scanlines"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-brand"><span class="dim">[</span>SIC<span class="dim">]</span></div>
+    <div class="nav-tabs">
+      <a href="index.html"    class="nav-tab">ANALYSIS</a>
+      <a href="timeline.html" class="nav-tab">TIMELINE</a>
+      <a href="intel.html"    class="nav-tab active">INTEL BRIEF</a>
+    </div>
+    <div class="nav-right">
+      <span class="live-dot"></span>
+      <span class="live-text">LIVE</span>
+    </div>
+  </nav>
+
+  <!-- Threat Ticker -->
+  <div class="ticker-bar">
+    <span class="ticker-label">&#9654; THREAT FEED</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        STRAIT OF HORMUZ TRAFFIC ANOMALY DETECTED &nbsp;&#9646;&nbsp;
+        IRANIAN EXPORT VOLUME DOWN 34% SINCE Q1 &nbsp;&#9646;&nbsp;
+        RED SEA ROUTING DELAYS: +12 DAYS AVERAGE &nbsp;&#9646;&nbsp;
+        RUSSIAN PIPELINE UTILIZATION AT 41% CAPACITY &nbsp;&#9646;&nbsp;
+        LITHIUM FUTURES SURGING — CHILE LABOR ACTION IMMINENT &nbsp;&#9646;&nbsp;
+        NORTH KOREAN COAL EXPORTS FLAGGED AT 3 PORTS &nbsp;&#9646;&nbsp;
+        WHEAT CORRIDOR AGREEMENT RENEWAL DEADLINE: T-14 DAYS &nbsp;&#9646;&nbsp;
+        CHINESE COPPER STOCKPILES BELOW 30-DAY THRESHOLD &nbsp;&#9646;&nbsp;
+        SAUDI ARAMCO PRODUCTION CUT: 500K BPD EFFECTIVE IMMEDIATELY &nbsp;&#9646;&nbsp;
+        VENEZUELA PDVSA TANKER FLEET SHADOW NETWORK ACTIVE &nbsp;&#9646;&nbsp;
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <div class="main-layout">
+
+      <!-- LEFT PANEL: Controls -->
+      <div class="left-panel intel-left">
+
+        <div class="app-header">
+          <div class="header-top">
+            <span class="header-bracket">[</span>
+            <span class="header-title">NATION INTELLIGENCE BRIEF</span>
+            <span class="header-bracket">]</span>
+          </div>
+          <div class="header-sub">STRATEGIC SUPPLY CHAIN VULNERABILITY ASSESSMENT<span class="blink-cursor">_</span></div>
+          <div class="header-meta">
+            <span>SYS v4.2.1</span>
+            <span>&#9646;</span>
+            <span>CLEARANCE: TS/SCI</span>
+            <span>&#9646;</span>
+            <span id="sys-time">--:--:-- UTC</span>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <div class="section-label">&#9642; SELECT SUBJECT NATION</div>
+
+          <div class="control-group">
+            <label class="field-label" for="intel-nation">TARGET NATION</label>
+            <div class="select-wrapper">
+              <select id="intel-nation" class="terminal-select">
+                <option value="">-- SELECT NATION --</option>
+                <option value="Iran">Iran</option>
+                <option value="Russia">Russia</option>
+                <option value="China">China</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="North Korea">North Korea</option>
+                <option value="Iraq">Iraq</option>
+                <option value="UAE">UAE</option>
+                <option value="Qatar">Qatar</option>
+                <option value="India">India</option>
+              </select>
+              <span class="select-arrow">&#9660;</span>
+            </div>
+          </div>
+
+          <button id="pull-btn" class="run-button">
+            <span class="btn-bracket">[</span>
+            <span class="btn-text">&#9658; PULL BRIEF</span>
+            <span class="btn-bracket">]</span>
+          </button>
+        </div>
+
+        <!-- Instruction block when nothing is selected -->
+        <div class="output-placeholder" id="intel-placeholder" style="margin: 0 20px 20px;">
+          <div class="placeholder-lines">
+            <div>SELECT A NATION ABOVE</div>
+            <div>THEN PULL BRIEF</div>
+            <div>TO GENERATE INTELLIGENCE</div>
+            <div>ASSESSMENT DOCUMENT</div>
+            <div class="blink-line">&#9646;&#9646;&#9646;</div>
+          </div>
+        </div>
+
+      </div><!-- /intel-left -->
+
+      <!-- RIGHT PANEL: Brief Output -->
+      <div class="right-panel intel-right" id="intel-right">
+        <div class="intel-brief-placeholder" id="intel-brief-placeholder">
+          <div class="brief-await">
+            <div class="brief-await-icon">&#9670;</div>
+            <div>AWAITING NATION SELECTION</div>
+            <div class="brief-await-sub">PULL BRIEF TO GENERATE INTELLIGENCE DOCUMENT</div>
+          </div>
+        </div>
+        <div class="intel-brief-content" id="intel-brief-content" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div><!-- /page-content -->
+
+  <script src="data.js"></script>
+  <script src="logger.js"></script>
+  <script src="calculations.js"></script>
+  <script src="render.js"></script>
+  <script>
+    'use strict';
+
+    const CHOKEPOINT_ORDER = ['Strait of Hormuz', 'Suez Canal', 'Red Sea', 'Bab el-Mandeb'];
+
+    function chopointLevelClass(level) {
+      if (level === 'HIGH')     return 'choke-high';
+      if (level === 'MODERATE') return 'choke-mod';
+      return 'choke-low';
+    }
+
+    function renderIntelBrief(nation) {
+      const d = NATION_INTEL[nation];
+      if (!d) return;
+
+      const container = document.getElementById('intel-brief-content');
+      const placeholder = document.getElementById('intel-brief-placeholder');
+
+      placeholder.style.display = 'none';
+      container.style.display = 'block';
+      container.innerHTML = '';
+
+      // Build the brief document
+      const html = [
+
+        // Document header
+        '<div class="brief-doc-header">',
+          '<div class="brief-doc-title">INTELLIGENCE BRIEF — ' + nation.toUpperCase() + '</div>',
+          '<div class="brief-doc-meta">',
+            '<span>CLASSIFICATION: TOP SECRET // SCI</span>',
+            '<span>&#9646;</span>',
+            '<span>REF: SIC-' + String(Math.floor(Math.random() * 9000) + 1000) + '</span>',
+            '<span>&#9646;</span>',
+            '<span>DATE: ' + new Date().toISOString().slice(0, 10) + '</span>',
+          '</div>',
+        '</div>',
+
+        // SECTION 1: Nation Profile
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 01 — NATION PROFILE</div>',
+          '<div class="brief-section-body">',
+            '<div class="brief-field-row"><span class="brief-field-label">GDP:</span><span class="brief-field-val" id="bf-gdp">&nbsp;</span></div>',
+            '<div class="brief-field-row"><span class="brief-field-label">POPULATION:</span><span class="brief-field-val" id="bf-pop">&nbsp;</span></div>',
+            '<div class="brief-field-row"><span class="brief-field-label">PRIMARY EXPORTS:</span></div>',
+            '<div class="brief-tag-list" id="bf-exports"></div>',
+          '</div>',
+        '</div>',
+
+        // SECTION 2: Supply Chain Role
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 02 — SUPPLY CHAIN ROLE</div>',
+          '<div class="brief-section-body">',
+            '<div class="brief-body-text" id="bf-role">&nbsp;</div>',
+          '</div>',
+        '</div>',
+
+        // SECTION 3: Critical Dependencies
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 03 — CRITICAL DEPENDENCIES</div>',
+          '<div class="brief-section-body" id="bf-deps"></div>',
+        '</div>',
+
+        // SECTION 4: Chokepoint Exposure
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 04 — CHOKEPOINT EXPOSURE</div>',
+          '<div class="brief-section-body" id="bf-chokes"></div>',
+        '</div>',
+
+        // SECTION 5: Vulnerability Score
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 05 — VULNERABILITY SCORE</div>',
+          '<div class="brief-section-body">',
+            '<div class="vuln-score-row">',
+              '<div class="vuln-score-num" id="bf-vscore">--</div>',
+              '<div class="vuln-score-label">/ 100</div>',
+            '</div>',
+            '<div class="bar-container" style="margin-top:10px;">',
+              '<div class="bar-fill" id="bf-vbar" style="width:0%"></div>',
+              '<div class="bar-label" id="bf-vbar-label">0</div>',
+            '</div>',
+            '<div class="vuln-scale-row">',
+              '<span>LOW RISK</span>',
+              '<span>MODERATE</span>',
+              '<span>CRITICAL</span>',
+              '<span>SEVERE</span>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        // SECTION 6: Threat Indicators
+        '<div class="brief-section">',
+          '<div class="brief-section-header">&#9642; 06 — CURRENT THREAT INDICATORS</div>',
+          '<div class="brief-section-body" id="bf-threats"></div>',
+        '</div>',
+
+        // Print button
+        '<div class="brief-print-row no-print">',
+          '<button class="run-button" id="print-btn" onclick="window.print()" style="width:auto;padding:10px 28px;">',
+            '<span class="btn-bracket">[</span>',
+            '<span class="btn-text">&#9166; PRINT BRIEF</span>',
+            '<span class="btn-bracket">]</span>',
+          '</button>',
+        '</div>',
+
+      ].join('');
+
+      container.innerHTML = html;
+
+      // Now populate with typewriter effect
+      const delay = 60; // ms between fields
+
+      setTimeout(function () { typewrite(document.getElementById('bf-gdp'), d.gdp, 16); }, delay * 1);
+      setTimeout(function () { typewrite(document.getElementById('bf-pop'), d.population, 16); }, delay * 2);
+
+      // Export tags
+      setTimeout(function () {
+        const tagsEl = document.getElementById('bf-exports');
+        tagsEl.innerHTML = d.primaryExports.map(function (ex) {
+          return '<span class="brief-tag">' + ex + '</span>';
+        }).join('');
+      }, delay * 3);
+
+      // Supply chain role
+      setTimeout(function () { typewrite(document.getElementById('bf-role'), d.supplyChainRole, 8); }, delay * 4);
+
+      // Dependencies
+      setTimeout(function () {
+        const depsEl = document.getElementById('bf-deps');
+        depsEl.innerHTML = d.criticalDependencies.map(function (dep) {
+          return '<div class="brief-dep-row">' +
+            '<span class="brief-dep-commodity">' + dep.commodity + '</span>' +
+            '<span class="brief-dep-note">' + dep.note + '</span>' +
+          '</div>';
+        }).join('');
+      }, delay * 5);
+
+      // Chokepoints
+      setTimeout(function () {
+        const chokesEl = document.getElementById('bf-chokes');
+        chokesEl.innerHTML = d.chokepoints.map(function (cp) {
+          return '<div class="brief-choke-row">' +
+            '<span class="brief-choke-name">' + cp.name + '</span>' +
+            '<span class="brief-choke-level ' + chopointLevelClass(cp.level) + '">' + cp.level + '</span>' +
+          '</div>';
+        }).join('');
+      }, delay * 6);
+
+      // Vulnerability score
+      setTimeout(function () {
+        typewrite(document.getElementById('bf-vscore'), String(d.vulnerabilityScore), 40);
+        setTimeout(function () {
+          const bar = document.getElementById('bf-vbar');
+          const label = document.getElementById('bf-vbar-label');
+          bar.style.transition = 'width 1.2s cubic-bezier(0.25,0.8,0.25,1)';
+          bar.style.width = d.vulnerabilityScore + '%';
+          // Color the bar by score
+          if (d.vulnerabilityScore >= 75)      bar.style.background = '#ff2020';
+          else if (d.vulnerabilityScore >= 55) bar.style.background = '#ffb000';
+          else if (d.vulnerabilityScore >= 35) bar.style.background = '#00cc33';
+          else                                  bar.style.background = '#008f11';
+          label.textContent = d.vulnerabilityScore;
+        }, 400);
+      }, delay * 7);
+
+      // Threat indicators
+      setTimeout(function () {
+        const threatsEl = document.getElementById('bf-threats');
+        threatsEl.innerHTML = d.threatIndicators.map(function (t) {
+          return '<div class="brief-threat-row"><span class="brief-threat-bullet">&#9658;</span><span class="brief-threat-text">' + t + '</span></div>';
+        }).join('');
+      }, delay * 8);
+    }
+
+    document.getElementById('pull-btn').addEventListener('click', function () {
+      const nation = document.getElementById('intel-nation').value;
+      if (!nation) {
+        flashSelect('intel-nation');
+        return;
+      }
+      const btn = document.getElementById('pull-btn');
+      btn.classList.add('running');
+      btn.querySelector('.btn-text').textContent = '■ RETRIEVING...';
+
+      document.getElementById('intel-placeholder').style.display = 'none';
+
+      setTimeout(function () {
+        btn.classList.remove('running');
+        btn.querySelector('.btn-text').textContent = '► PULL BRIEF';
+        renderIntelBrief(nation);
+      }, 800);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONFLICT TIMELINE — SIC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="scanlines"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-brand"><span class="dim">[</span>SIC<span class="dim">]</span></div>
+    <div class="nav-tabs">
+      <a href="index.html"    class="nav-tab">ANALYSIS</a>
+      <a href="timeline.html" class="nav-tab active">TIMELINE</a>
+      <a href="intel.html"    class="nav-tab">INTEL BRIEF</a>
+    </div>
+    <div class="nav-right">
+      <span class="live-dot"></span>
+      <span class="live-text">LIVE</span>
+    </div>
+  </nav>
+
+  <!-- Threat Ticker -->
+  <div class="ticker-bar">
+    <span class="ticker-label">&#9654; THREAT FEED</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        STRAIT OF HORMUZ TRAFFIC ANOMALY DETECTED &nbsp;&#9646;&nbsp;
+        IRANIAN EXPORT VOLUME DOWN 34% SINCE Q1 &nbsp;&#9646;&nbsp;
+        RED SEA ROUTING DELAYS: +12 DAYS AVERAGE &nbsp;&#9646;&nbsp;
+        RUSSIAN PIPELINE UTILIZATION AT 41% CAPACITY &nbsp;&#9646;&nbsp;
+        LITHIUM FUTURES SURGING — CHILE LABOR ACTION IMMINENT &nbsp;&#9646;&nbsp;
+        NORTH KOREAN COAL EXPORTS FLAGGED AT 3 PORTS &nbsp;&#9646;&nbsp;
+        WHEAT CORRIDOR AGREEMENT RENEWAL DEADLINE: T-14 DAYS &nbsp;&#9646;&nbsp;
+        CHINESE COPPER STOCKPILES BELOW 30-DAY THRESHOLD &nbsp;&#9646;&nbsp;
+        SAUDI ARAMCO PRODUCTION CUT: 500K BPD EFFECTIVE IMMEDIATELY &nbsp;&#9646;&nbsp;
+        VENEZUELA PDVSA TANKER FLEET SHADOW NETWORK ACTIVE &nbsp;&#9646;&nbsp;
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content timeline-page">
+
+    <div class="timeline-page-header">
+      <div class="timeline-title-row">
+        <div>
+          <div class="tl-page-title"><span class="dim">[</span> CONFLICT &amp; SUPPLY CHAIN EVENT LOG <span class="dim">]</span></div>
+          <div class="tl-page-sub">GEOPOLITICAL DISRUPTION CHRONOLOGY — SORTED: MOST RECENT FIRST<span class="blink-cursor">_</span></div>
+        </div>
+        <div class="tl-meta">
+          <span>EVENTS: <span id="event-count" class="green-bright">16</span></span>
+          <span>&#9646;</span>
+          <span>RANGE: 2021 – PRESENT</span>
+        </div>
+      </div>
+
+      <!-- Filter row -->
+      <div class="filter-row">
+        <span class="filter-label">FILTER BY COMMODITY:</span>
+        <button class="filter-btn active" data-filter="ALL">ALL</button>
+        <button class="filter-btn" data-filter="OIL">OIL</button>
+        <button class="filter-btn" data-filter="GAS">GAS</button>
+        <button class="filter-btn" data-filter="WHEAT">WHEAT</button>
+        <button class="filter-btn" data-filter="SHIPPING">SHIPPING</button>
+      </div>
+    </div>
+
+    <!-- Timeline container -->
+    <div class="timeline-outer">
+      <div class="timeline-line-track">
+        <div class="tl-vert-line"></div>
+      </div>
+      <div class="events-list" id="events-list"></div>
+    </div>
+
+  </div><!-- /page-content -->
+
+  <script src="data.js"></script>
+  <script src="logger.js"></script>
+  <script src="calculations.js"></script>
+  <script src="render.js"></script>
+  <script>
+    'use strict';
+
+    let activeFilter = 'ALL';
+
+    function renderTimeline(filter) {
+      activeFilter = filter;
+      const events = filter === 'ALL'
+        ? TIMELINE_EVENTS
+        : TIMELINE_EVENTS.filter(function (e) { return e.category === filter; });
+
+      document.getElementById('event-count').textContent = events.length;
+
+      const list = document.getElementById('events-list');
+      list.innerHTML = '';
+
+      events.forEach(function (ev, i) {
+        const isRecent = (i === 0);
+        const isUp     = ev.marketResponse.change >= 0;
+        const changeStr = (isUp ? '+' : '') + ev.marketResponse.change.toFixed(1) + '%';
+
+        const card = document.createElement('div');
+        card.className = 'tl-event' + (isRecent ? ' tl-most-recent' : '');
+        card.setAttribute('data-category', ev.category);
+
+        const dot = document.createElement('div');
+        dot.className = 'tl-dot' + (isRecent ? ' tl-dot-pulse' : '');
+
+        const content = document.createElement('div');
+        content.className = 'tl-card';
+        content.innerHTML =
+          '<div class="tl-card-top">' +
+            '<span class="tl-date">' + ev.date + '</span>' +
+            '<span class="tl-cat-tag tl-cat-' + ev.category + '">' + ev.category + '</span>' +
+          '</div>' +
+          '<div class="tl-title">' + ev.title + '</div>' +
+          '<div class="tl-desc">' + ev.description + '</div>' +
+          '<div class="tl-response">' +
+            '<span class="tl-response-label">48H MARKET RESPONSE:</span>' +
+            '<span class="tl-response-val ' + (isUp ? 'response-up' : 'response-down') + '">' +
+              ev.marketResponse.label + ' ' + changeStr +
+            '</span>' +
+          '</div>';
+
+        card.appendChild(dot);
+        card.appendChild(content);
+        list.appendChild(card);
+      });
+    }
+
+    // Filter button clicks
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(function (b) {
+          b.classList.remove('active');
+        });
+        btn.classList.add('active');
+        renderTimeline(btn.getAttribute('data-filter'));
+      });
+    });
+
+    renderTimeline('ALL');
+  </script>
+</body>
+</html>
